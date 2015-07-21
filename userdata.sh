@@ -22,6 +22,6 @@ echo "Downloading Payara $PAYARA_VERSION"
 wget -q $MICRO 
 sudo mkdir -p $PAYARA_HOME
 mv payara-micro-prerelease.jar $PAYARA_HOME
-sudo chown ubuntu:ubuntu /opt/payara
+sudo chown -r ubuntu:ubuntu /opt/payara
 
-wget https://gist.github.com/b42077bb540711e7ff18.git -P /opt/payara/
+wget https://gist.githubusercontent.com/mikecroft/b42077bb540711e7ff18/raw/b870a5ba14680e00c0cb91ed20a8db6f2e781089/hazelcast.xml -P /opt/payara/
