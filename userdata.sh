@@ -25,3 +25,5 @@ mv payara-micro-prerelease.jar $PAYARA_HOME
 sudo chown -R ubuntu:ubuntu /opt/payara
 
 wget https://gist.githubusercontent.com/mikecroft/b42077bb540711e7ff18/raw/b870a5ba14680e00c0cb91ed20a8db6f2e781089/hazelcast.xml -P /opt/payara/
+
+java -jar /opt/payara/payara-micro-prerelease.jar --hzConfigFile /opt/payara/hazelcast.xml
