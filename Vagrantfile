@@ -12,7 +12,8 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "base"
+#  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "dummy"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -48,11 +49,40 @@ Vagrant.configure(2) do |config|
   #   vb.gui = true
   #
   #   # Customize the amount of memory on the VM:
-    vb.memory = "256"
+    vb.memory = "512"
   end
   #
   # View the documentation for the provider you are using for more
   # information on available options.
+
+ 
+  config.vm.provider :aws do |aws, override|
+    aws.access_key_id = ENV['AWS_ACCESS_KEY']
+    aws.secret_access_key = ENV['AWS_SECRET_KEY']
+  # aws.session_token = "SESSION TOKEN"
+    aws.region = "eu-central-1"
+    aws.keypair_name = "wm-jug1"
+
+    # Default ami - ubuntu-trusty-14.04-amd64-server-20150325 (Frankfurt)
+    aws.ami = "ami-accff2b1"
+
+    # Simple region-specific AMI config
+    aws.region_config "eu-central-1", :ami => "ami-accff2b1"
+
+    aws.instance_type = "t2.micro"
+    aws.subnet_id = "subnet-b04fe3d9"
+
+    aws.tags = {
+      'Name' => 'vagrant-payara-micro',
+    }
+    
+    aws.security_groups = "sg-908032f9"
+
+    aws.user_data = File.read("userdata.sh")
+
+    override.ssh.username = "ubuntu"
+    override.ssh.private_key_path = "/home/mike/.ssh/wm-jug1.pem"
+  end 
 
   # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
   # such as FTP and Heroku are also available. See the documentation at
@@ -64,29 +94,29 @@ Vagrant.configure(2) do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  config.vm.provision "shell", inline: <<-SHELL
-    ##########################################
-    # Setting properties
-    #
-    # Payara directory
-    PAYARA_HOME=/opt/payara
-    MICRO=https://s3-eu-west-1.amazonaws.com/payara.co/payara-micro-prerelease.jar
-    #
-    ##########################################
-    
-    echo "Provisioning Payara Micro to $PAYARA_HOME"
-    
-    # Download and unzip to /opt/payara
-    echo "running update..."
-    sudo apt-get -qqy update                      # Update the repos 
-    
-    echo "installing openjdk"
-    sudo apt-get -qqy install openjdk-7-jdk       # Newest JDK in 14.04 LTS repos 
-    
-    echo "Downloading Payara $PAYARA_VERSION"
-    wget -q $MICRO 
-    sudo mkdir -p $PAYARA_HOME
-    mv payara-micro-prerelease.jar $PAYARA_HOME
-    sudo chown ubuntu:ubuntu /opt/payara
-  SHELL
+#  config.vm.provision "shell", inline: <<-SHELL
+#    ##########################################
+#    # Setting properties
+#    #
+#    # Payara directory
+#    PAYARA_HOME=/opt/payara
+#    MICRO=https://s3-eu-west-1.amazonaws.com/payara.co/payara-micro-prerelease.jar
+#    #
+#    ##########################################
+#    
+#    echo "Provisioning Payara Micro to $PAYARA_HOME"
+#    
+#    # Download and unzip to /opt/payara
+#    echo "running update..."
+#    sudo apt-get -qqy update                      # Update the repos 
+#    
+#    echo "installing openjdk"
+#    sudo apt-get -qqy install openjdk-7-jdk       # Newest JDK in 14.04 LTS repos 
+#    
+#    echo "Downloading Payara $PAYARA_VERSION"
+#    wget -q $MICRO 
+#    sudo mkdir -p $PAYARA_HOME
+#    mv payara-micro-prerelease.jar $PAYARA_HOME
+#    sudo chown ubuntu:ubuntu /opt/payara
+#  SHELL
 end

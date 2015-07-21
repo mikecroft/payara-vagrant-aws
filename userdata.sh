@@ -23,3 +23,5 @@ wget -q $MICRO
 sudo mkdir -p $PAYARA_HOME
 mv payara-micro-prerelease.jar $PAYARA_HOME
 sudo chown ubuntu:ubuntu /opt/payara
+
+wget https://gist.github.com/b42077bb540711e7ff18.git -P /opt/payara/

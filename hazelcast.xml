@@ -50,8 +50,8 @@
                 </member-list>
             </tcp-ip>
             <aws enabled="false">
-                <access-key></access-key>
-                <secret-key></secret-key>
+                <access-key>123</access-key>
+                <secret-key>456</secret-key>
                 <!--optional, default is us-east-1 -->
                 <region>eu-central-1</region>
                 <!--optional, default is ec2.amazonaws.com. If set, region shouldn't be set as it will override this property -->
